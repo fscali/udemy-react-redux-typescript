@@ -1,4 +1,5 @@
-import { ActionType, Action } from '@/state/index'
+import { ActionType } from '@/state/action-types/index'
+import { Action } from '@/state/actions/index'
 interface RepositoriesState {
     loading: boolean
     error: string | null

@@ -1,5 +1,2 @@
-import { ActionType } from './action-types'
-import { Action } from './actions'
-export { ActionType }
-
-export type { Action }
+export * from './store'
+export * as actionCreators from './action-creators'
