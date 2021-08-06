@@ -31,9 +31,24 @@ export const fetchPlugin = (inputCode: string) => {
           data,
           request: { responseURL },
         } = await axios.get(args.path);
+        const fileType = args.path.match(/.css$/) ? 'css' : 'jsx';
+        const escaped = data
+          .replace(/\n/g, '')
+          .replace(/"/g, '\\"')
+          .replace(/'/g, "\\'");
+        const contents =
+          fileType === 'css'
+            ? `
+        
+          const style = document.createElement('style');
+          style.innerText = '${escaped}';
+          document.head.appendChild(style);
+
+        `
+            : data;
         const result: esbuild.OnLoadResult = {
           loader: 'jsx',
-          contents: data,
+          contents: contents,
 
           // perché new URL('./','https://unpkg.com/nested-test-pkg@1.0.0/src/index.js').pathname === /nested-test-pkg@1.0.0/src/
           resolveDir: new URL('./', responseURL).pathname,
