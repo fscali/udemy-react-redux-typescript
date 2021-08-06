@@ -18,14 +18,17 @@ export const fetchPlugin = (inputCode: string) => {
         };
       });
 
-      build.onLoad({ filter: /.css$/ }, async (args: any) => {
+      build.onLoad({ filter: /.*/ }, async (args: any) => {
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
         );
         if (cachedResult) {
           return cachedResult;
         }
+        // if we don't return anything, esbuild proceed to the next handler, otherwise (result is cached) its stops here
+      });
 
+      build.onLoad({ filter: /.css$/ }, async (args: any) => {
         //responseURL is a property of the XMLHttpRequest with the final url where I am redirected
         const {
           data,
@@ -54,13 +57,6 @@ export const fetchPlugin = (inputCode: string) => {
         return result;
       });
       build.onLoad({ filter: /.*/ }, async (args) => {
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        );
-        if (cachedResult) {
-          return cachedResult;
-        }
-
         //responseURL is a property of the XMLHttpRequest with the final url where I am redirected
         const {
           data,
