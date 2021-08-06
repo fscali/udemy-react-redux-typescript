@@ -27,6 +27,12 @@ const App = () => {
       bundle: true,
       write: false,
       plugins: [unpkgPathPlugin()],
+      define: {
+        'process.env.NODE_ENV':
+          '"production"' /* > a:https://unpkg.com/scheduler: warning: Define "process.env.NODE_ENV" when bundling for the browser
+        3 │ if (process.env.NODE_ENV === 'production') {*/,
+        global: 'window', // this is done automatically by webpack..with esbuild we have to do it explicitly
+      },
     });
 
     setCode(result.outputFiles[0].text);
