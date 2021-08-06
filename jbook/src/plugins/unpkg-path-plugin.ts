@@ -14,7 +14,10 @@ export const unpkgPathPlugin = () => {
         if (args.path.includes('./') || args.path.includes('../')) {
           return {
             namespace: 'a',
-            path: new URL(args.path, args.importer + '/').href,
+            path: new URL(
+              args.path,
+              'https://unpkg.com' + args.resolveDir + '/'
+            ).href,
           };
         }
 
@@ -22,13 +25,6 @@ export const unpkgPathPlugin = () => {
           namespace: 'a',
           path: `https://unpkg.com/${args.path}`,
         };
-
-        /* else if (args.path === 'tiny-test-pkg') {
-          return {
-            path: 'https://unpkg.com/tiny-test-pkg@1.0.0/index.js',
-            namespace: 'a',
-          }; */
-        //}
       });
 
       build.onLoad({ filter: /.*/ }, async (args) => {
@@ -38,16 +34,24 @@ export const unpkgPathPlugin = () => {
           return {
             loader: 'jsx',
             contents: `
-              import message from 'medium-test-pkg';
+              import message from 'nested-test-pkg';
               console.log(message);
             `,
           };
         }
 
-        const { data } = await axios.get(args.path);
+        //responseURL is a property of the XMLHttpRequest with the final url where I am redirected
+        const {
+          data,
+          request: { responseURL },
+        } = await axios.get(args.path);
+        console.log('ResponseURL: ' + responseURL);
         return {
           loader: 'jsx',
           contents: data,
+
+          // perché new URL('./','https://unpkg.com/nested-test-pkg@1.0.0/src/index.js').pathname === /nested-test-pkg@1.0.0/src/
+          resolveDir: new URL('./', responseURL).pathname,
         };
       });
     },
