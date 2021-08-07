@@ -1,8 +1,13 @@
 import MonacoEditor from '@monaco-editor/react';
 
-const CodeEditor = () => {
+interface CodeEditorProps {
+  initialValue: string;
+}
+
+const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue }) => {
   return (
     <MonacoEditor
+      value={initialValue} // NB: this is only the initial value
       options={{
         wordWrap: 'on',
         minimap: { enabled: false },
