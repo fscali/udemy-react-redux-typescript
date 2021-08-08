@@ -1,10 +1,10 @@
 import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import ReactDOM from 'react-dom';
-import { useState, useEffect, useRef } from 'react';
-
+import { useState } from 'react';
 import CodeEditor from './components/code-editor';
 import Preview from './components/preview';
 import bundle from './bundler';
+
 const App = () => {
   const [input, setInput] = useState('');
   const [code, setCode] = useState('');
