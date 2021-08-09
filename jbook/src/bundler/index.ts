@@ -10,20 +10,29 @@ const bundler = async (rawCode: string) => {
       wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm',
     });
   }
-
-  const result = await service.build({
-    entryPoints: ['index.js'],
-    bundle: true,
-    write: false,
-    plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
-    define: {
-      'process.env.NODE_ENV':
-        '"production"' /* > a:https://unpkg.com/scheduler: warning: Define "process.env.NODE_ENV" when bundling for the browser
-      3 │ if (process.env.NODE_ENV === 'production') {*/,
-      global: 'window', // this is done automatically by webpack..with esbuild we have to do it explicitly
-    },
-  });
-  return result.outputFiles[0].text;
+  try {
+    const result = await service.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
+      define: {
+        'process.env.NODE_ENV':
+          '"production"' /* > a:https://unpkg.com/scheduler: warning: Define "process.env.NODE_ENV" when bundling for the browser
+        3 │ if (process.env.NODE_ENV === 'production') {*/,
+        global: 'window', // this is done automatically by webpack..with esbuild we have to do it explicitly
+      },
+    });
+    return {
+      code: result.outputFiles[0].text,
+      err: '',
+    };
+  } catch (err) {
+    return {
+      code: '',
+      err: err.message,
+    };
+  }
 };
 
 export default bundler;
