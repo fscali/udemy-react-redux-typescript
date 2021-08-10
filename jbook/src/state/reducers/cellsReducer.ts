@@ -17,21 +17,23 @@ const initialState: CellsState = {
   order: [],
 };
 
-const cellsReducer = produce((state = initialState, action: Action) => {
-  switch (action.type) {
-    case ActionType.UPDATE_CELL:
-      const { id, content } = action.payload;
-      state.data[id].content = content;
-      return;
-    case ActionType.DELETE_CELL:
-      return state;
-    case ActionType.MOVE_CELL:
-      return state;
-    case ActionType.INSERT_CELL_BEFORE:
-      return state;
-    default:
-      return state;
+const cellsReducer = produce(
+  (state: CellsState = initialState, action: Action) => {
+    switch (action.type) {
+      case ActionType.UPDATE_CELL:
+        const { id, content } = action.payload;
+        state.data[id].content = content;
+        return;
+      case ActionType.DELETE_CELL:
+        return state;
+      case ActionType.MOVE_CELL:
+        return state;
+      case ActionType.INSERT_CELL_BEFORE:
+        return state;
+      default:
+        return state;
+    }
   }
-});
+);
 
 export default cellsReducer;
