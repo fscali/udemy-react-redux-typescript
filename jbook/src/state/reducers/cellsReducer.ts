@@ -25,7 +25,16 @@ const cellsReducer = produce(
         state.data[id].content = content;
         return;
       case ActionType.DELETE_CELL:
-        return state;
+        const { payload } = action;
+
+        // see https://immerjs.github.io/immer/update-patterns for deleting from objects (1) and arrays (2)
+        delete state.data[payload];
+
+        const index = state.order.findIndex((o) => o === payload);
+        if (index !== -1) state.order.splice(index, 1);
+        // or
+        //state.order = state.order.filter(id => id!== action.payload);
+        return;
       case ActionType.MOVE_CELL:
         return state;
       case ActionType.INSERT_CELL_BEFORE:
