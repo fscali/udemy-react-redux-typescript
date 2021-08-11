@@ -46,6 +46,28 @@ const cellsReducer = produce(
         state.order[targetIndex] = action.payload.id;
         return;
       case ActionType.INSERT_CELL_BEFORE:
+        const cell: Cell = {
+          content: '',
+          type: action.payload.type,
+          id: randomId(),
+        };
+
+        // add cell object
+        state.data[cell.id] = cell;
+
+        // update order of cells
+        if (!action.payload.id) {
+          state.order.push(cell.id);
+        } else {
+          const targetIndex = state.order.findIndex(
+            (id) => id === action.payload.id
+          );
+          if (targetIndex >= 0) {
+            // see https://immerjs.github.io/immer/update-patterns for inserting an item at a specific index
+            state.order.splice(targetIndex, 0, cell.id);
+          }
+        }
+
         return state;
       default:
         return state;

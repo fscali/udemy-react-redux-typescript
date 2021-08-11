@@ -18,7 +18,7 @@ export interface DeleteCellAction {
 export interface InsertCellBeforeAction {
   type: ActionType.INSERT_CELL_BEFORE;
   payload: {
-    id: string;
+    id: string | null; // by convention we assume that when id is null we want to insert the cell at the very end
     type: CellTypes;
   };
 }
