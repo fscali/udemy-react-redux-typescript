@@ -39,11 +39,10 @@ const cellsReducer = produce(
         const { direction } = action.payload;
         const index = state.order.findIndex((id) => id === action.payload.id);
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
-
-        if (targetIndex < 0 || targetIndex > state.order.length - 1) return;
-
-        state.order[index] = state.order[targetIndex];
-        state.order[targetIndex] = action.payload.id;
+        if (targetIndex >= 0 && targetIndex <= state.order.length - 1) {
+          state.order[index] = state.order[targetIndex];
+          state.order[targetIndex] = action.payload.id;
+        }
         return;
       case ActionType.INSERT_CELL_BEFORE:
         const cell: Cell = {
@@ -67,12 +66,13 @@ const cellsReducer = produce(
             state.order.splice(targetIndex, 0, cell.id);
           }
         }
+        return;
 
-        return state;
       default:
-        return state;
+        return;
     }
-  }
+  },
+  initialState
 );
 
 const randomId = () => {
