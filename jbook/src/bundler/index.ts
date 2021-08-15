@@ -22,6 +22,8 @@ const bundler = async (rawCode: string) => {
         3 │ if (process.env.NODE_ENV === 'production') {*/,
         global: 'window', // this is done automatically by webpack..with esbuild we have to do it explicitly
       },
+      jsxFactory: '_React.createElement',
+      jsxFragment: '_React.Fragment',
     });
     return {
       code: result.outputFiles[0].text,
