@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { ActionType } from '../action-types';
-import { Action, BundleStartAction } from '../actions';
+import { Action } from '../actions';
 
 interface BundleState {
   [key: string]: {
@@ -32,7 +32,8 @@ const reducer = produce(
       default:
         return state;
     }
-  }
+  },
+  initialState
 );
 
 export default reducer;
