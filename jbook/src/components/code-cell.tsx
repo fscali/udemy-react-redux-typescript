@@ -33,11 +33,11 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
 
   useEffect(() => {
     if (!bundle) {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
       return;
     }
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
     }, 1000);
 
     // remember that a feature of useEffect is that the returned function will
@@ -46,7 +46,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.content, cell.id, createBundle]);
+  }, [cumulativeCode.join('\n'), cell.id, createBundle]);
 
   return (
     <Resizable direction="vertical">
